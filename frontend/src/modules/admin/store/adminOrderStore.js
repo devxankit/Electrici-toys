@@ -69,7 +69,7 @@ const getUserOrders = () => {
     }
 };
 
-export const useVendorOrderStore = create()(
+export const useAdminOrderStore = create()(
     persist(
         (set, get) => ({
             orders: [
@@ -100,7 +100,7 @@ export const useVendorOrderStore = create()(
             }
         }),
         {
-            name: 'vendor-order-storage',
+            name: 'admin-order-storage',
         }
     )
 );

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { useVendorAuthStore } from '../../store/vendorAuthStore';
+import { useAdminAuthStore } from '../../store/adminAuthStore';
 import { Button } from '../../../user/components/ui/button';
 import { Input } from '../../../user/components/ui/input';
 import { useToast } from '../../../user/components/Toast';
 import { Loader2, ArrowRight, Store, Rocket } from 'lucide-react';
 
-export default function VendorRegister() {
+export default function AdminRegister() {
     const navigate = useNavigate();
-    const { register } = useVendorAuthStore();
+    const { register } = useAdminAuthStore();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -43,7 +43,7 @@ export default function VendorRegister() {
                     description: "Welcome to the Partner Program.",
                     variant: "success",
                 });
-                navigate('/vendor');
+                navigate('/admin');
             } else {
                 toast({
                     title: "Registration Failed",
@@ -81,7 +81,7 @@ export default function VendorRegister() {
                             <span className="text-primary">Journey</span>
                         </h2>
                         <p className="text-xl text-muted-foreground font-medium max-w-md">
-                            Create your vendor account today and start reaching millions of toy enthusiasts instantly.
+                            Create your admin account today and start managing the platform instantly.
                         </p>
 
                         <div className="space-y-4 pt-4">
@@ -102,8 +102,8 @@ export default function VendorRegister() {
                         className="bg-background/60 backdrop-blur-xl border border-secondary/20 p-8 md:p-10 rounded-[2.5rem] shadow-2xl order-1 lg:order-2"
                     >
                         <div className="mb-8">
-                            <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-2">Vendor Apply</h1>
-                            <p className="text-muted-foreground font-medium italic">Join the Electrici-Toys Partner Network</p>
+                            <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-2">Admin Apply</h1>
+                            <p className="text-muted-foreground font-medium italic">Join the Electrici-Toys Admin Team</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -178,7 +178,7 @@ export default function VendorRegister() {
                         <div className="mt-8 text-center space-y-4">
                             <p className="text-sm font-medium text-muted-foreground">
                                 Already a partner?{' '}
-                                <Link to="/vendor/login" className="text-primary font-black uppercase tracking-wider hover:underline">
+                                <Link to="/admin/login" className="text-primary font-black uppercase tracking-wider hover:underline">
                                     Login Here
                                 </Link>
                             </p>

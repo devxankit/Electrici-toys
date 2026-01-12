@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useVendorProductStore } from '../../store/vendorProductStore';
+import { useAdminProductStore } from '../../store/adminProductStore';
 import { Button } from '../../../user/components/ui/button';
 import { Input } from '../../../user/components/ui/input';
 import { Label } from '../../../user/components/ui/label';
@@ -12,7 +12,7 @@ export default function ProductForm() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { toast } = useToast();
-    const { getProductById, addProduct, updateProduct } = useVendorProductStore();
+    const { getProductById, addProduct, updateProduct } = useAdminProductStore();
     const isEdit = !!id;
 
     const [formData, setFormData] = useState({
@@ -44,7 +44,7 @@ export default function ProductForm() {
                     description: "Redirecting to list...",
                     variant: "destructive"
                 });
-                navigate('/vendor/products');
+                navigate('/admin/products');
             }
         }
     }, [id, isEdit, getProductById]);
@@ -88,7 +88,7 @@ export default function ProductForm() {
             toast({ title: "New Toy Added!", description: `${formData.name} is now available.` });
         }
 
-        navigate('/vendor/products');
+        navigate('/admin/products');
     };
 
     return (
@@ -98,7 +98,7 @@ export default function ProductForm() {
                     variant="ghost"
                     size="icon"
                     className="rounded-full"
-                    onClick={() => navigate('/vendor/products')}
+                    onClick={() => navigate('/admin/products')}
                 >
                     <ArrowLeft className="h-5 w-5" />
                 </Button>
@@ -324,7 +324,7 @@ export default function ProductForm() {
                             type="button"
                             variant="outline"
                             className="h-14 rounded-full font-black italic tracking-widest uppercase px-8 border-secondary/20"
-                            onClick={() => navigate('/vendor/products')}
+                            onClick={() => navigate('/admin/products')}
                         >
                             <X className="h-5 w-5" />
                         </Button>

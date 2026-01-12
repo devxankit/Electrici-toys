@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
-import { ProductCard } from '../components/ProductCard';
+import * as LucideIcons from 'lucide-react';
+import { useContentStore } from '../../admin/store/adminContentStore';
 import { products } from '../../../data/products';
 import { QuickView } from '../components/QuickView';
-import { Shield, Truck, CreditCard, RotateCcw } from 'lucide-react';
+import { ProductCard } from '../components/ProductCard';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { Card } from '../components/ui/card';
+import { staggerContainer, fadeIn, scaleUp } from '../lib/animations';
 
 export function Home() {
+    const { content } = useContentStore();
+    const { homePage } = content;
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
@@ -17,68 +23,116 @@ export function Home() {
         setIsQuickViewOpen(true);
     };
 
-    return (
-        <div className="flex flex-col gap-20 pb-20 overflow-x-hidden">
-            {/* Hero Section */}
-            {/* Hero Section */}
-            <section className="relative h-[85vh] flex items-center justify-center bg-secondary/20 overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <img src="/hero.png" alt="Hero" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/30 md:bg-black/10" />
-                </div>
+    const IconRenderer = ({ name, ...props }) => {
+        const Icon = LucideIcons[name] || LucideIcons.HelpCircle;
+        return <Icon {...props} />;
+    };
 
-                <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
+    return (
+        <motion.div
+            initial="hidden"
+            animate="show"
+            className="flex flex-col gap-24 pb-32 overflow-x-hidden"
+        >
+            {/* Hero Section */}
+            <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+                <motion.div
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    className="absolute inset-0 z-0"
+                >
+                    <img src={homePage.hero.image} alt="Hero" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background" />
+                </motion.div>
+
+                <div className="container mx-auto px-4 relative z-10">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="max-w-4xl"
+                        variants={staggerContainer(0.2, 0.5)}
+                        className="max-w-5xl mx-auto flex flex-col items-center text-center"
                     >
-                        <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] uppercase italic text-white drop-shadow-2xl">
-                            UNLEASH THE <span className="text-primary not-italic">POWER</span> OF PLAY.
-                        </h1>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <Button size="lg" className="rounded-full px-12 text-xl font-black italic tracking-tighter h-16 shadow-2xl shadow-primary/30 hover:scale-105 transition-all bg-primary text-white border-2 border-primary">
-                                SHOP COLLECTION
-                            </Button>
-                        </div>
+                        <motion.h1
+                            variants={fadeIn('up')}
+                            className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-10 leading-[0.85] uppercase italic text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                        >
+                            {homePage.hero.heading.split(' ').map((word, i) =>
+                                word === 'POWER' ? <span key={i} className="text-primary not-italic text-glow">POWER </span> : word + ' '
+                            )}
+                        </motion.h1>
+
+                        <motion.div variants={fadeIn('up')}>
+                            <a href={homePage.hero.ctaLink}>
+                                <Button
+                                    premium
+                                    size="lg"
+                                    className="rounded-full px-16 h-20 text-2xl font-black italic tracking-tighter shadow-glow"
+                                >
+                                    {homePage.hero.ctaText}
+                                </Button>
+                            </a>
+                        </motion.div>
                     </motion.div>
                 </div>
             </section>
 
             {/* Trust Markers */}
             <section className="container mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-y">
-                    {[
-                        { icon: Shield, title: "1-YEAR WARRANTY", desc: "Full peace of mind" },
-                        { icon: Truck, title: "EXPRESS SHIPPING", desc: "Same day dispatch" },
-                        { icon: CreditCard, title: "GST INVOICE", desc: "Business ready" },
-                        { icon: RotateCcw, title: "EASY RETURNS", desc: "7-day policy" }
-                    ].map((item, i) => (
-                        <div key={i} className="flex flex-col items-center text-center space-y-2">
-                            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-2">
-                                <item.icon className="h-6 w-6" />
+                <motion.div
+                    variants={staggerContainer(0.1)}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.25 }}
+                    className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16 px-8 rounded-[3rem] border bg-card/30 backdrop-blur-sm"
+                >
+                    {homePage.trustMarkers.map((item, i) => (
+                        <motion.div
+                            key={i}
+                            variants={fadeIn('up')}
+                            className="flex flex-col items-center text-center space-y-4 group"
+                        >
+                            <motion.div
+                                whileHover={{ rotate: 10, scale: 1.1 }}
+                                className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-2 transition-colors group-hover:bg-primary group-hover:text-white group-hover:shadow-glow"
+                            >
+                                <IconRenderer name={item.icon} className="h-8 w-8" />
+                            </motion.div>
+                            <div className="space-y-1">
+                                <h4 className="text-xs font-black tracking-[0.2em] uppercase">{item.title}</h4>
+                                <p className="text-[10px] text-muted-foreground font-bold uppercase opacity-60 group-hover:opacity-100 transition-opacity">{item.description}</p>
                             </div>
-                            <h4 className="text-xs font-black tracking-widest uppercase">{item.title}</h4>
-                            <p className="text-[10px] text-muted-foreground font-bold uppercase">{item.desc}</p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </section>
 
             {/* Featured Products */}
             <section className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row items-baseline justify-between mb-16 gap-4">
-                    <div>
-                        <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-primary leading-none">THE HIT LIST</h2>
-                        <p className="text-lg text-muted-foreground font-medium italic">Our most-wanted electric wonders.</p>
+                <motion.div
+                    variants={fadeIn('up')}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6"
+                >
+                    <div className="space-y-4">
+                        <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic text-primary leading-[0.8]">
+                            {homePage.featuredSection.title}
+                        </h2>
+                        <p className="text-lg md:text-xl text-muted-foreground font-bold italic opacity-70">
+                            {homePage.featuredSection.subtitle}
+                        </p>
                     </div>
-                    <Button variant="link" className="font-black text-xl tracking-tighter uppercase italic group">
-                        All Products <span className="ml-2 group-hover:translate-x-2 transition-transform">→</span>
-                    </Button>
-                </div>
+                    <a href={homePage.featuredSection.ctaLink}>
+                        <Button variant="link" className="font-black text-xl tracking-tighter uppercase italic group p-0 h-auto gap-3">
+                            {homePage.featuredSection.ctaText}
+                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full border-2 border-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                                →
+                            </span>
+                        </Button>
+                    </a>
+                </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
                     {featuredProducts.map((product) => (
                         <ProductCard
                             key={product.id}
@@ -89,51 +143,67 @@ export function Home() {
                 </div>
             </section>
 
-            {/* Featured Categories (Visual) */}
+            {/* Featured Categories */}
             <section className="container mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <motion.div
-                        whileHover={{ scale: 0.98 }}
-                        className="h-[500px] rounded-[3rem] bg-accent/20 relative overflow-hidden group p-12 flex flex-col justify-end border-2 border-transparent hover:border-accent/30 transition-all duration-500"
-                    >
-                        <img
-                            src="/assets/products/Ha1214f3bb2bb47c0b55e98d0143b90455.jpg_720x720q50.jpg"
-                            alt="Hoverboard"
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] object-contain opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700 pointer-events-none"
-                        />
-                        <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none mb-4">Hover<br />Boards</h3>
-                        <p className="max-w-xs text-muted-foreground font-bold mb-8 uppercase tracking-widest text-xs">Self-balancing tech with precision engineering.</p>
-                        <Button className="w-fit rounded-full px-8 h-12 font-black italic">DISCOVER NOW</Button>
-                    </motion.div>
+                    {homePage.categories.slice(0, 1).map((cat) => (
+                        <motion.div
+                            key={cat.id}
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, type: "spring" }}
+                            className={`h-[450px] md:h-[600px] rounded-[3rem] bg-${cat.bgColor} relative overflow-hidden group p-10 md:p-16 flex flex-col justify-end border-2 border-transparent hover:border-${cat.borderColor} transition-all duration-700 shadow-2xl hover:shadow-glow`}
+                        >
+                            <motion.img
+                                initial={{ scale: 1.2, rotate: -5 }}
+                                whileInView={{ scale: 1, rotate: 0 }}
+                                transition={{ duration: 1.2 }}
+                                src={cat.image}
+                                alt={cat.name}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] object-contain opacity-20 group-hover:opacity-40 group-hover:scale-110 group-hover:rotate-6 transition-all duration-1000 pointer-events-none filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+                            />
+                            <div className="relative z-10">
+                                <h3 className="text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-[0.85] mb-6 drop-shadow-lg">
+                                    {cat.title.split('\\n').map((line, i) => (
+                                        <React.Fragment key={i}>
+                                            {line}
+                                            {i === 0 && <br />}
+                                        </React.Fragment>
+                                    ))}
+                                </h3>
+                                <p className="max-w-xs text-muted-foreground font-black mb-10 uppercase tracking-[0.2em] text-xs opacity-80">{cat.description}</p>
+                                <a href={cat.ctaLink} className="w-fit">
+                                    <Button premium size="lg" className="rounded-full px-12 h-14 font-black italic shadow-2xl">{cat.ctaText}</Button>
+                                </a>
+                            </div>
+                        </motion.div>
+                    ))}
 
                     <div className="grid grid-cols-1 gap-8">
-                        <motion.div
-                            whileHover={{ scale: 0.98 }}
-                            className="h-[234px] rounded-[3rem] bg-primary/10 relative overflow-hidden group p-8 flex flex-col justify-center border-2 border-transparent hover:border-primary/30 transition-all duration-500"
-                        >
-                            <img
-                                src="/assets/products/WhatsApp Image 2026-01-10 at 16.10.54.jpeg"
-                                alt="Drift Pro"
-                                className="absolute right-0 top-1/2 -translate-y-1/2 w-[70%] h-[140%] object-contain opacity-40 group-hover:opacity-60 group-hover:rotate-12 transition-all duration-700 pointer-events-none"
-                            />
-                            <h3 className="text-4xl font-black italic tracking-tighter uppercase">Drift Pro</h3>
-                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-4">Maximum Slide. Zero Friction.</p>
-                            <Button variant="outline" className="w-fit rounded-full border-2 font-black italic">EXPLORE</Button>
-                        </motion.div>
-
-                        <motion.div
-                            whileHover={{ scale: 0.98 }}
-                            className="h-[234px] rounded-[3rem] bg-indigo-500/10 relative overflow-hidden group p-8 flex flex-col justify-center border-2 border-transparent hover:border-indigo-500/30 transition-all duration-500"
-                        >
-                            <img
-                                src="/assets/products/WhatsApp Image 2026-01-10 at 16.11.05.jpeg"
-                                alt="Robotics"
-                                className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[120%] object-contain opacity-40 group-hover:opacity-60 group-hover:-rotate-12 transition-all duration-700 pointer-events-none"
-                            />
-                            <h3 className="text-4xl font-black italic tracking-tighter uppercase">Robotics</h3>
-                            <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-4">Smart toys, smarter interaction.</p>
-                            <Button variant="outline" className="w-fit rounded-full border-2 font-black italic">EXPLORE</Button>
-                        </motion.div>
+                        {homePage.categories.slice(1).map((cat, idx) => (
+                            <motion.div
+                                key={cat.id}
+                                initial={{ opacity: 0, x: 50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: idx * 0.2, type: "spring" }}
+                                className={`h-[210px] md:h-[284px] rounded-[3rem] bg-${cat.bgColor} relative overflow-hidden group p-8 md:p-12 flex flex-col justify-center border-2 border-transparent hover:border-${cat.borderColor} transition-all duration-700 shadow-xl hover:shadow-glow`}
+                            >
+                                <img
+                                    src={cat.image}
+                                    alt={cat.name}
+                                    className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[150%] object-contain opacity-20 group-hover:opacity-40 group-hover:rotate-12 group-hover:scale-110 transition-all duration-1000 pointer-events-none filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
+                                />
+                                <div className="relative z-10">
+                                    <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase mb-2 leading-none">{cat.title}</h3>
+                                    <p className="text-[10px] md:text-xs text-muted-foreground font-black uppercase tracking-[0.2em] mb-8 opacity-70">{cat.description}</p>
+                                    <a href={cat.ctaLink} className="w-fit">
+                                        <Button variant="outline" className="rounded-full border-2 border-foreground/10 font-black italic h-12 px-8 hover:bg-foreground hover:text-background transition-colors shadow-lg">{cat.ctaText}</Button>
+                                    </a>
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -144,6 +214,6 @@ export function Home() {
                 open={isQuickViewOpen}
                 onOpenChange={setIsQuickViewOpen}
             />
-        </div>
+        </motion.div>
     );
 }

@@ -43,14 +43,14 @@ export function ProductDetail() {
                     <span className="text-foreground">{product.name}</span>
                 </nav>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16">
                     {/* Image Gallery Placeholder */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="space-y-4"
                     >
-                        <div className="aspect-square rounded-[3rem] bg-secondary/20 flex items-center justify-center relative overflow-hidden group">
+                        <div className="aspect-square rounded-[2rem] md:rounded-[3rem] bg-secondary/20 flex items-center justify-center relative overflow-hidden group">
                             {product.image ? (
                                 <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                             ) : (
@@ -58,9 +58,9 @@ export function ProductDetail() {
                             )}
                             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-4 gap-3 md:gap-4">
                             {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="aspect-square rounded-2xl bg-secondary/20 flex items-center justify-center text-3xl cursor-pointer hover:bg-secondary/40 transition-colors overflow-hidden">
+                                <div key={i} className="aspect-square rounded-xl md:rounded-2xl bg-secondary/20 flex items-center justify-center text-3xl cursor-pointer hover:bg-secondary/40 transition-colors overflow-hidden">
                                     {product.image ? <img src={product.image} alt="" className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity" /> : '🎮'}
                                 </div>
                             ))}
@@ -78,32 +78,32 @@ export function ProductDetail() {
                             {product.isNew && <Badge variant="success" className="font-black tracking-widest uppercase">NEW ARRIVAL</Badge>}
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.85] mb-6">
+                        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.9] mb-4 md:mb-6">
                             {product.name}
                         </h1>
 
-                        <div className="flex items-center gap-4 mb-8">
+                        <div className="flex items-center gap-4 mb-6 md:mb-8">
                             <div className="flex text-amber-500">
                                 {[1, 2, 3, 4, 5].map((s) => (
-                                    <Star key={s} className={`h-5 w-5 ${s <= Math.floor(product.rating) ? 'fill-current' : ''}`} />
+                                    <Star key={s} className={`h-4 w-4 md:h-5 md:w-5 ${s <= Math.floor(product.rating) ? 'fill-current' : ''}`} />
                                 ))}
                             </div>
-                            <span className="text-sm font-black italic text-muted-foreground uppercase">{product.rating} / 5.0 Rating</span>
+                            <span className="text-xs md:text-sm font-black italic text-muted-foreground uppercase">{product.rating} / 5.0 Rating</span>
                         </div>
 
-                        <p className="text-lg text-muted-foreground font-medium italic mb-8 leading-relaxed">
+                        <p className="text-base md:text-lg text-muted-foreground font-medium italic mb-6 md:mb-8 leading-relaxed">
                             {product.description}
                         </p>
 
-                        <div className="flex items-center gap-6 mb-10">
-                            <span className="text-5xl font-black italic tracking-tighter text-primary">₹{product.price.toLocaleString()}</span>
+                        <div className="flex items-center gap-6 mb-8 md:mb-10">
+                            <span className="text-4xl md:text-5xl font-black italic tracking-tighter text-primary">₹{product.price.toLocaleString()}</span>
                             {product.originalPrice && (
-                                <span className="text-2xl text-muted-foreground line-through decoration-primary/50 italic tracking-tighter">₹{product.originalPrice.toLocaleString()}</span>
+                                <span className="text-xl md:text-2xl text-muted-foreground line-through decoration-primary/50 italic tracking-tighter">₹{product.originalPrice.toLocaleString()}</span>
                             )}
                         </div>
 
-                        <div className="flex flex-wrap gap-4 items-center mb-10">
-                            <div className="flex items-center bg-secondary/50 rounded-full p-1 border-2 border-transparent focus-within:border-primary transition-all">
+                        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center mb-8 md:mb-10">
+                            <div className="flex items-center justify-between bg-secondary/50 rounded-full p-1 border-2 border-transparent focus-within:border-primary transition-all w-full sm:w-auto">
                                 <Button
                                     variant="ghost"
                                     size="icon"
@@ -123,24 +123,26 @@ export function ProductDetail() {
                                 </Button>
                             </div>
 
-                            <Button
-                                size="lg"
-                                className="flex-1 h-14 rounded-full font-black italic tracking-tighter text-xl shadow-xl shadow-primary/20 group"
-                                onClick={() => {
-                                    for (let i = 0; i < quantity; i++) addItem(product);
-                                }}
-                            >
-                                ADD TO CART <ShoppingCart className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-                            </Button>
+                            <div className="flex gap-4 w-full sm:w-auto">
+                                <Button
+                                    size="lg"
+                                    className="flex-1 sm:flex-none h-14 rounded-full font-black italic tracking-tighter text-lg md:text-xl shadow-xl shadow-primary/20 group px-8"
+                                    onClick={() => {
+                                        for (let i = 0; i < quantity; i++) addItem(product);
+                                    }}
+                                >
+                                    ADD TO CART <ShoppingCart className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                                </Button>
 
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                className="h-14 w-14 rounded-full border-2"
-                                onClick={() => toggleWishlist(product)}
-                            >
-                                <Heart className={isInWishlist ? "fill-primary text-primary" : ""} />
-                            </Button>
+                                <Button
+                                    variant="outline"
+                                    size="lg"
+                                    className="h-14 w-14 rounded-full border-2 flex-shrink-0"
+                                    onClick={() => toggleWishlist(product)}
+                                >
+                                    <Heart className={isInWishlist ? "fill-primary text-primary" : ""} />
+                                </Button>
+                            </div>
                         </div>
 
                         {/* Features/Trust */}
@@ -160,7 +162,7 @@ export function ProductDetail() {
 
             {/* Related Products */}
             {relatedProducts.length > 0 && (
-                <section className="container mx-auto px-4 mt-32">
+                <section className="container mx-auto px-4 mt-16 md:mt-32">
                     <h2 className="text-4xl font-black tracking-tighter uppercase italic text-primary mb-12">YOU MIGHT ALSO LIKE</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {relatedProducts.map(p => (

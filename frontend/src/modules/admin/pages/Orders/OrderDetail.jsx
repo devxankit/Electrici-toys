@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useVendorOrderStore } from '../../store/vendorOrderStore';
+import { useAdminOrderStore } from '../../store/adminOrderStore';
 import { Button } from '../../../user/components/ui/button';
 import { Badge } from '../../../user/components/ui/badge';
 import {
@@ -22,14 +22,14 @@ import { format } from 'date-fns';
 export default function OrderDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { getOrderById, updateOrderStatus } = useVendorOrderStore();
+    const { getOrderById, updateOrderStatus } = useAdminOrderStore();
     const order = getOrderById(id);
 
     if (!order) {
         return (
             <div className="p-8 text-center py-20">
                 <h2 className="text-2xl font-black italic uppercase tracking-tighter">Order not found</h2>
-                <Button onClick={() => navigate('/vendor/orders')} className="mt-4">Back to Orders</Button>
+                <Button onClick={() => navigate('/admin/orders')} className="mt-4">Back to Orders</Button>
             </div>
         );
     }

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { useVendorAuthStore } from '../../store/vendorAuthStore';
+import { useAdminAuthStore } from '../../store/adminAuthStore';
 import { Button } from '../../../user/components/ui/button';
 import { Input } from '../../../user/components/ui/input';
 import { useToast } from '../../../user/components/Toast';
 import { Loader2, ArrowRight, Store } from 'lucide-react';
 
-export default function VendorLogin() {
+export default function AdminLogin() {
     const navigate = useNavigate();
-    const { login } = useVendorAuthStore();
+    const { login } = useAdminAuthStore();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -28,10 +28,10 @@ export default function VendorLogin() {
             if (result.success) {
                 toast({
                     title: "Welcome back, Partner!",
-                    description: "Successfully logged into your vendor hub.",
+                    description: "Successfully logged into your admin hub.",
                     variant: "success",
                 });
-                navigate('/vendor');
+                navigate('/admin');
             } else {
                 toast({
                     title: "Access Denied",
@@ -62,8 +62,8 @@ export default function VendorLogin() {
                         className="bg-background/60 backdrop-blur-xl border border-secondary/20 p-8 md:p-10 rounded-[2.5rem] shadow-2xl"
                     >
                         <div className="mb-8">
-                            <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-2">Vendor Login</h1>
-                            <p className="text-muted-foreground font-medium italic">Access your store dashboard & analytics</p>
+                            <h1 className="text-4xl font-black italic uppercase tracking-tighter mb-2">Admin Login</h1>
+                            <p className="text-muted-foreground font-medium italic">Access your dashboard & analytics</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -112,7 +112,7 @@ export default function VendorLogin() {
                         <div className="mt-8 text-center space-y-4">
                             <p className="text-sm font-medium text-muted-foreground">
                                 Not a partner yet?{' '}
-                                <Link to="/vendor/register" className="text-primary font-black uppercase tracking-wider hover:underline">
+                                <Link to="/admin/register" className="text-primary font-black uppercase tracking-wider hover:underline">
                                     Apply Now
                                 </Link>
                             </p>
@@ -138,7 +138,7 @@ export default function VendorLogin() {
                             <span className="text-primary">Toy Empire</span>
                         </h2>
                         <p className="text-xl text-muted-foreground font-medium max-w-md ml-auto">
-                            Join thousands of successful vendors selling the coolest electric toys on the planet. Manage inventory, track sales, and scale up.
+                            Join the team managing the coolest electric toys on the planet. Manage inventory, track sales, and scale up.
                         </p>
 
                         <div className="grid grid-cols-2 gap-6 mt-12 pl-20">
@@ -148,7 +148,7 @@ export default function VendorLogin() {
                             </div>
                             <div className="bg-secondary/10 p-6 rounded-3xl border border-secondary/20 backdrop-blur-sm">
                                 <h3 className="text-2xl font-black text-primary">24/7</h3>
-                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Vendor Support</p>
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Admin Support</p>
                             </div>
                         </div>
                     </motion.div>

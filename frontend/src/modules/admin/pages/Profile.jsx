@@ -47,7 +47,7 @@ export default function Profile() {
                         <div className="relative group">
                             <div className="h-32 w-32 rounded-[2rem] bg-primary/20 flex items-center justify-center p-1 border-2 border-primary/20 overflow-hidden">
                                 {user?.avatar ? (
-                                    <img src={user.avatar} alt="Vendor" className="w-full h-full object-cover rounded-3xl" />
+                                    <img src={user.avatar} alt="Admin" className="w-full h-full object-cover rounded-3xl" />
                                 ) : (
                                     <User className="h-12 w-12 text-primary" />
                                 )}
@@ -56,7 +56,7 @@ export default function Profile() {
                                 <Camera className="h-4 w-4" />
                             </button>
                         </div>
-                        <h3 className="mt-6 text-xl font-black italic uppercase tracking-tighter">{user?.name || 'Toy Vendor'}</h3>
+                        <h3 className="mt-6 text-xl font-black italic uppercase tracking-tighter">{user?.name || 'Admin User'}</h3>
                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Verified Seller Since 2024</p>
 
                         <div className="w-full h-[1px] bg-secondary/20 my-6" />
@@ -97,7 +97,7 @@ export default function Profile() {
                             </div>
                             <div className="space-y-2">
                                 <Label className="text-[10px] font-black uppercase tracking-widest ml-2">Public Email</Label>
-                                <Input defaultValue={user?.email || 'vendor@example.com'} className="rounded-2xl h-12 bg-background border-secondary/10" />
+                                <Input defaultValue={user?.email || 'admin@example.com'} className="rounded-2xl h-12 bg-background border-secondary/10" />
                             </div>
                         </div>
                         <div className="space-y-2">

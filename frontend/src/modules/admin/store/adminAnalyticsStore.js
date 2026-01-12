@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export const useVendorAnalyticsStore = create()(
+export const useAdminAnalyticsStore = create()(
     persist(
         (set, get) => ({
             revenueData: [
@@ -41,7 +41,7 @@ export const useVendorAnalyticsStore = create()(
             }
         }),
         {
-            name: 'vendor-analytics-storage',
+            name: 'admin-analytics-storage',
         }
     )
 );

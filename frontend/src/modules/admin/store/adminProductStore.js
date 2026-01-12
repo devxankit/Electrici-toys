@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { products as initialProducts } from '../../../data/products';
 
-export const useVendorProductStore = create()(
+export const useAdminProductStore = create()(
     persist(
         (set, get) => ({
             products: initialProducts.map(p => ({ ...p, status: 'Active', stock: Math.floor(Math.random() * 100) })),
@@ -47,7 +47,7 @@ export const useVendorProductStore = create()(
             }
         }),
         {
-            name: 'vendor-product-storage',
+            name: 'admin-product-storage',
         }
     )
 );

@@ -10,9 +10,9 @@ import {
     ShoppingBag,
     Plus
 } from 'lucide-react';
-import { useVendorProductStore } from '../store/vendorProductStore';
-import { useVendorOrderStore } from '../store/vendorOrderStore';
-import { useVendorAnalyticsStore } from '../store/vendorAnalyticsStore';
+import { useAdminProductStore } from '../store/adminProductStore';
+import { useAdminOrderStore } from '../store/adminOrderStore';
+import { useAdminAnalyticsStore } from '../store/adminAnalyticsStore';
 import {
     AreaChart,
     Area,
@@ -32,10 +32,10 @@ import { useNavigate } from 'react-router-dom';
 import { Badge } from '../../user/components/ui/badge';
 import { format } from 'date-fns';
 
-export default function VendorDashboard() {
-    const { products } = useVendorProductStore();
-    const { orders } = useVendorOrderStore();
-    const { revenueData, getSummary, topProducts } = useVendorAnalyticsStore();
+export default function AdminDashboard() {
+    const { products } = useAdminProductStore();
+    const { orders } = useAdminOrderStore();
+    const { revenueData, getSummary, topProducts } = useAdminAnalyticsStore();
     const summary = getSummary();
     const navigate = useNavigate();
 
@@ -81,17 +81,17 @@ export default function VendorDashboard() {
                     <h1 className="text-4xl font-black italic tracking-tighter uppercase mb-2 text-foreground">Overview</h1>
                     <p className="text-muted-foreground font-medium italic">Welcome back! Your toy empire is growing.</p>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                     <Button
                         variant="outline"
-                        className="rounded-full font-bold uppercase tracking-widest text-xs border-secondary/20"
-                        onClick={() => navigate('/vendor/analytics')}
+                        className="rounded-full font-bold uppercase tracking-widest text-xs border-secondary/20 w-full sm:w-auto"
+                        onClick={() => navigate('/admin/analytics')}
                     >
                         View Full Reports
                     </Button>
                     <Button
-                        onClick={() => navigate('/vendor/products/new')}
-                        className="rounded-full font-black italic tracking-widest uppercase px-8 shadow-xl shadow-primary/20"
+                        onClick={() => navigate('/admin/products/new')}
+                        className="rounded-full font-black italic tracking-widest uppercase px-8 shadow-xl shadow-primary/20 w-full sm:w-auto"
                     >
                         <Plus className="mr-2 h-4 w-4" /> Add Toy
                     </Button>
@@ -218,7 +218,7 @@ export default function VendorDashboard() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => navigate('/vendor/orders')}
+                        onClick={() => navigate('/admin/orders')}
                         className="text-[10px] font-black uppercase tracking-widest text-primary"
                     >
                         View All

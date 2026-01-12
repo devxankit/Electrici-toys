@@ -57,20 +57,20 @@ export function Checkout() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
-            <h1 className="text-4xl md:text-5xl font-black italic tracking-tighter uppercase mb-8">Checkout</h1>
+        <div className="container mx-auto px-4 py-8 max-w-6xl pb-24">
+            <h1 className="text-3xl md:text-5xl font-black italic tracking-tighter uppercase mb-6 md:mb-8">Checkout</h1>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
                 {/* Shipping Form */}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="space-y-8"
+                    className="space-y-6 md:space-y-8"
                 >
-                    <div className="bg-secondary/10 p-8 rounded-[2rem] border border-secondary/20">
+                    <div className="bg-secondary/10 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-secondary/20">
                         <div className="flex items-center gap-3 mb-6">
                             <MapPin className="text-primary h-6 w-6" />
-                            <h2 className="text-2xl font-black italic tracking-tight uppercase">Shipping Details</h2>
+                            <h2 className="text-xl md:text-2xl font-black italic tracking-tight uppercase">Shipping Details</h2>
                         </div>
 
                         <form id="checkout-form" onSubmit={handlePlaceOrder} className="space-y-4">
@@ -82,7 +82,7 @@ export function Checkout() {
                                         type="text"
                                         value={formData.fullName}
                                         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-base"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -93,7 +93,7 @@ export function Checkout() {
                                         type="email"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-base"
                                         placeholder="john@example.com"
                                     />
                                 </div>
@@ -106,7 +106,7 @@ export function Checkout() {
                                     type="text"
                                     value={formData.address}
                                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                    className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                                    className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-base"
                                     placeholder="123 Electric Ave"
                                 />
                             </div>
@@ -119,7 +119,7 @@ export function Checkout() {
                                         type="text"
                                         value={formData.city}
                                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-base"
                                         placeholder="New York"
                                     />
                                 </div>
@@ -130,7 +130,7 @@ export function Checkout() {
                                         type="text"
                                         value={formData.zipCode}
                                         onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
-                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                                        className="w-full bg-background border border-input rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-base"
                                         placeholder="10001"
                                     />
                                 </div>
@@ -138,10 +138,10 @@ export function Checkout() {
                         </form>
                     </div>
 
-                    <div className="bg-secondary/10 p-8 rounded-[2rem] border border-secondary/20">
+                    <div className="bg-secondary/10 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-secondary/20">
                         <div className="flex items-center gap-3 mb-6">
                             <CreditCard className="text-primary h-6 w-6" />
-                            <h2 className="text-2xl font-black italic tracking-tight uppercase">Payment Method</h2>
+                            <h2 className="text-xl md:text-2xl font-black italic tracking-tight uppercase">Payment Method</h2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

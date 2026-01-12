@@ -9,7 +9,7 @@ import {
     ArrowDownRight,
     Download
 } from 'lucide-react';
-import { useVendorAnalyticsStore } from '../store/vendorAnalyticsStore';
+import { useAdminAnalyticsStore } from '../store/adminAnalyticsStore';
 import {
     BarChart,
     Bar,
@@ -31,7 +31,7 @@ import { Button } from '../../user/components/ui/button';
 import { Badge } from '../../user/components/ui/badge';
 
 export default function Analytics() {
-    const { revenueData, categorySales, topProducts, getSummary } = useVendorAnalyticsStore();
+    const { revenueData, categorySales, topProducts, getSummary } = useAdminAnalyticsStore();
     const summary = getSummary();
     const [timeRange, setTimeRange] = useState('Last 7 Days');
 

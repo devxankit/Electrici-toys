@@ -12,7 +12,7 @@ export function ThemeToggle() {
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className="relative h-10 w-10 rounded-full bg-secondary/50 hover:bg-secondary"
+            className="relative h-10 w-10 rounded-full glass"
         >
             <AnimatePresence mode="wait" initial={false}>
                 <motion.div

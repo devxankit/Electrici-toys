@@ -53,7 +53,7 @@ export default function Notifications() {
             id: 4,
             type: 'System',
             title: 'System Update',
-            message: 'Vendor Dashboard v2.0 is now live with enhanced analytics.',
+            message: 'Admin Dashboard v2.0 is now live with enhanced analytics.',
             time: new Date(Date.now() - 172800000).toISOString(),
             read: true,
             icon: Zap,

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 // Layouts
 import { UserLayout } from './modules/user/layout/UserLayout';
-import VendorLayout from './modules/vendor/layout/VendorLayout';
+import AdminLayout from './modules/admin/layout/AdminLayout';
 
 // Module: User Pages
 import { Home } from './modules/user/pages/Home';
@@ -23,51 +23,64 @@ import { MyOrders } from './modules/user/pages/MyOrders';
 import { OrderSuccess } from './modules/user/pages/OrderSuccess';
 import { ToastManager } from './modules/user/components/Toast';
 
-// Module: Vendor Pages
-import VendorDashboard from './modules/vendor/pages/Dashboard';
-import ProductList from './modules/vendor/pages/Products/ProductList';
-import ProductForm from './modules/vendor/pages/Products/ProductForm';
-import OrderList from './modules/vendor/pages/Orders/OrderList';
-import OrderDetail from './modules/vendor/pages/Orders/OrderDetail';
-import Analytics from './modules/vendor/pages/Analytics';
-import Profile from './modules/vendor/pages/Profile';
-import Notifications from './modules/vendor/pages/Notifications';
-import VendorLogin from './modules/vendor/pages/Auth/VendorLogin';
-import VendorRegister from './modules/vendor/pages/Auth/VendorRegister';
+// Module: Admin Pages
+import AdminDashboard from './modules/admin/pages/AdminDashboard';
+import ProductList from './modules/admin/pages/Products/ProductList';
+import ProductForm from './modules/admin/pages/Products/ProductForm';
+import OrderList from './modules/admin/pages/Orders/OrderList';
+import OrderDetail from './modules/admin/pages/Orders/OrderDetail';
+import Analytics from './modules/admin/pages/Analytics';
+import Profile from './modules/admin/pages/Profile';
+import Notifications from './modules/admin/pages/Notifications';
+import AdminLogin from './modules/admin/pages/Auth/AdminLogin';
+import AdminRegister from './modules/admin/pages/Auth/AdminRegister';
 
-// Placeholder components with better styling
-const Placeholder = ({ title, emoji = "🚀" }) => (
-  <div className="container mx-auto px-4 py-32 text-center">
-    <motion.div
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="text-9xl mb-8"
-    >
-      {emoji}
-    </motion.div>
-    <h1 className="text-6xl md:text-8xl font-black mb-4 uppercase italic tracking-tighter text-primary">{title}</h1>
-    <p className="text-xl text-muted-foreground font-medium italic">We're building something electric. Stay tuned!</p>
+// Content Management
+import { HomeContent } from './modules/admin/pages/Content/HomeContent';
+import { AboutContent } from './modules/admin/pages/Content/AboutContent';
+
+import { ContactContent } from './modules/admin/pages/Content/ContactContent';
+import { ExperienceContent } from './modules/admin/pages/Content/ExperienceContent';
+import { useContentStore } from './modules/admin/store/adminContentStore';
+
+// Placeholder for missing components
+const Placeholder = ({ title, emoji = '🚧' }) => (
+  <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4 text-center p-8">
+    <span className="text-6xl animate-bounce">{emoji}</span>
+    <h2 className="text-2xl font-black italic uppercase tracking-tighter text-primary">{title}</h2>
+    <p className="text-muted-foreground font-medium">This page is currently under construction.</p>
   </div>
 );
+
+const AboutContentEditor = () => <AboutContent />;
+const ContactContentEditor = () => <ContactContent />;
+const ExperienceContentEditor = () => <ExperienceContent />;
 
 function App() {
   return (
     <ToastManager>
       <Router>
         <Routes>
-          {/* Vendor Auth Routes */}
-          <Route path="/vendor/login" element={<VendorLogin />} />
-          <Route path="/vendor/register" element={<VendorRegister />} />
+          {/* Admin Auth Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/register" element={<AdminRegister />} />
 
-          {/* Vendor Routes */}
-          <Route path="/vendor" element={<VendorLayout />}>
-            <Route index element={<VendorDashboard />} />
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
             <Route path="products" element={<ProductList />} />
             <Route path="products/new" element={<ProductForm />} />
             <Route path="products/:id/edit" element={<ProductForm />} />
             <Route path="orders" element={<OrderList />} />
             <Route path="orders/:id" element={<OrderDetail />} />
             <Route path="analytics" element={<Analytics />} />
+
+            {/* Content Management */}
+            <Route path="content/home" element={<HomeContent />} />
+            <Route path="content/about" element={<AboutContentEditor />} />
+            <Route path="content/contact" element={<ContactContentEditor />} />
+            <Route path="content/experience" element={<ExperienceContentEditor />} />
+
             <Route path="profile" element={<Profile />} />
             <Route path="notifications" element={<Notifications />} />
           </Route>

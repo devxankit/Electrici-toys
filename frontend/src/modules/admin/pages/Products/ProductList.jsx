@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from "@/lib/utils";
-import { useVendorProductStore } from '../../store/vendorProductStore';
+import { useAdminProductStore } from '../../store/adminProductStore';
 import { Badge } from '../../../user/components/ui/badge';
 import { Button } from '../../../user/components/ui/button';
 import {
@@ -25,7 +25,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 export default function ProductList() {
-    const { products, deleteProduct, toggleStatus } = useVendorProductStore();
+    const { products, deleteProduct, toggleStatus } = useAdminProductStore();
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
@@ -54,7 +54,7 @@ export default function ProductList() {
                     <p className="text-muted-foreground font-medium italic">Manage your toy collection ({products.length} products)</p>
                 </div>
                 <Button
-                    onClick={() => navigate('/vendor/products/new')}
+                    onClick={() => navigate('/admin/products/new')}
                     className="rounded-full font-black italic tracking-widest uppercase px-8 py-6 h-auto shadow-xl shadow-primary/20 group transform hover:scale-105 transition-all"
                 >
                     <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
@@ -63,8 +63,8 @@ export default function ProductList() {
             </div>
 
             {/* Filters Bar */}
-            <div className="bg-secondary/10 p-4 rounded-3xl border border-secondary/20 flex flex-wrap gap-4 items-center">
-                <div className="flex-1 min-w-[300px] relative">
+            <div className="bg-secondary/10 p-4 rounded-3xl border border-secondary/20 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
+                <div className="flex-1 w-full relative">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <input
                         type="text"
@@ -75,11 +75,11 @@ export default function ProductList() {
                     />
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
                     <select
                         value={categoryFilter}
                         onChange={(e) => setCategoryFilter(e.target.value)}
-                        className="bg-background border border-secondary/20 rounded-2xl px-6 py-3 outline-none font-bold uppercase tracking-widest text-xs cursor-pointer"
+                        className="bg-background border border-secondary/20 rounded-2xl px-6 py-3 outline-none font-bold uppercase tracking-widest text-xs cursor-pointer w-full sm:w-auto"
                     >
                         {categories.map(cat => (
                             <option key={cat} value={cat}>{cat} CATEGORY</option>
@@ -89,7 +89,7 @@ export default function ProductList() {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="bg-background border border-secondary/20 rounded-2xl px-6 py-3 outline-none font-bold uppercase tracking-widest text-xs cursor-pointer"
+                        className="bg-background border border-secondary/20 rounded-2xl px-6 py-3 outline-none font-bold uppercase tracking-widest text-xs cursor-pointer w-full sm:w-auto"
                     >
                         <option value="All">ALL STATUS</option>
                         <option value="Active">ACTIVE</option>
@@ -184,7 +184,7 @@ export default function ProductList() {
                                                     <DropdownMenuItem onClick={() => navigate(`/product/${product.id}`)} className="rounded-xl px-4 py-3 cursor-pointer">
                                                         <Eye className="mr-3 h-4 w-4" /> View Store
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => navigate(`/vendor/products/${product.id}/edit`)} className="rounded-xl px-4 py-3 cursor-pointer">
+                                                    <DropdownMenuItem onClick={() => navigate(`/admin/products/${product.id}/edit`)} className="rounded-xl px-4 py-3 cursor-pointer">
                                                         <Edit className="mr-3 h-4 w-4" /> Edit Toy
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator className="bg-secondary/10" />

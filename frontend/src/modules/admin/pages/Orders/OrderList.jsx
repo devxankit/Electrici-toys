@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useVendorOrderStore } from '../../store/vendorOrderStore';
+import { useAdminOrderStore } from '../../store/adminOrderStore';
 import { Badge } from '../../../user/components/ui/badge';
 import { Button } from '../../../user/components/ui/button';
 import {
@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 
 export default function OrderList() {
-    const { orders, updateOrderStatus } = useVendorOrderStore();
+    const { orders, updateOrderStatus } = useAdminOrderStore();
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
@@ -101,8 +101,8 @@ export default function OrderList() {
                             key={status}
                             onClick={() => setStatusFilter(status)}
                             className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${statusFilter === status
-                                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                                    : 'hover:bg-secondary/20'
+                                ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                                : 'hover:bg-secondary/20'
                                 }`}
                         >
                             {status}
@@ -164,7 +164,7 @@ export default function OrderList() {
                                                     variant="ghost"
                                                     size="sm"
                                                     className="rounded-full hover:bg-primary/10 text-primary font-black italic tracking-widest uppercase text-[10px]"
-                                                    onClick={() => navigate(`/vendor/orders/${order.id}`)}
+                                                    onClick={() => navigate(`/admin/orders/${order.id}`)}
                                                 >
                                                     Details <ArrowRight className="ml-2 h-3 w-3 text-primary" />
                                                 </Button>

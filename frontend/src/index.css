@@ -28,21 +28,27 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* Custom Design Tokens */
+  --shadow-premium: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-premium-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --color-glass-white: rgba(255, 255, 255, 0.1);
 
-  @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height); }
+  dark {
+    --color-glass-white: rgba(0, 0, 0, 0.3);
   }
-  @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height); }
-    to { height: 0; }
-  }
+
+  /* Premium Gradients */
+  --gradient-electric: linear-gradient(135deg, oklch(0.585 0.233 277.117), oklch(0.65 0.25 300));
+  --gradient-warm: linear-gradient(135deg, oklch(0.769 0.188 70.08), oklch(0.85 0.22 85));
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  /* Smooth Spring Transitions */
+  --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @layer base {
@@ -53,13 +59,15 @@
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.585 0.233 277.117); /* Electric Purple/Blue */
+    --primary: oklch(0.585 0.233 277.117);
+    /* Electric Purple/Blue */
     --primary-foreground: oklch(0.985 0 0);
     --secondary: oklch(0.97 0 0);
     --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(0.97 0 0);
     --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.769 0.188 70.08); /* Warm Toy Orange */
+    --accent: oklch(0.769 0.188 70.08);
+    /* Warm Toy Orange */
     --accent-foreground: oklch(0.205 0 0);
     --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: oklch(0.577 0.245 27.325);
@@ -92,12 +100,31 @@
   }
 }
 
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-3xl border border-border/10 bg-background/95 shadow-sm;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md border border-white/5 bg-black/40;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px -5px var(--primary);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px var(--primary);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply bg-background text-foreground transition-colors duration-300 antialiased;
   }
 }
 

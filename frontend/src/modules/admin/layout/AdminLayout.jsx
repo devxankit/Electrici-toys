@@ -3,16 +3,16 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Menu, User, Bell, Search, LogOut } from 'lucide-react';
 import { Button } from '../../user/components/ui/button';
-import { useVendorAuthStore } from '../store/vendorAuthStore';
+import { useAdminAuthStore } from '../store/adminAuthStore';
 
-export default function VendorLayout() {
+export default function AdminLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const { vendor, logout } = useVendorAuthStore();
+    const { admin, logout } = useAdminAuthStore();
     const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
-        navigate('/vendor/login');
+        navigate('/admin/login');
     };
 
     return (
@@ -50,12 +50,12 @@ export default function VendorLayout() {
 
                         <div className="flex items-center gap-4 pl-2">
                             <div className="hidden md:block text-right">
-                                <p className="text-xs font-black italic uppercase tracking-tighter">{vendor?.name || 'Vendor Admin'}</p>
-                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Store Manager</p>
+                                <p className="text-xs font-black italic uppercase tracking-tighter">{admin?.name || 'Admin Panel'}</p>
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Administrator</p>
                             </div>
                             <div className="h-10 w-10 rounded-2xl bg-primary/20 flex items-center justify-center p-0.5 border border-primary/20 overflow-hidden">
-                                {vendor?.avatar ? (
-                                    <img src={vendor.avatar} alt="Vendor" className="w-full h-full object-cover rounded-xl" />
+                                {admin?.avatar ? (
+                                    <img src={admin.avatar} alt="Admin" className="w-full h-full object-cover rounded-xl" />
                                 ) : (
                                     <User className="h-5 w-5 text-primary" />
                                 )}

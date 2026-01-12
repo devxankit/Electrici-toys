@@ -35,16 +35,16 @@ export function Products() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-primary leading-none mb-2">SHOP ALL</h1>
-                        <p className="text-lg text-muted-foreground font-medium italic">Discover our full range of electric excitement.</p>
+                        <h1 className="text-4xl md:text-7xl font-black tracking-tighter uppercase italic text-primary leading-none mb-2">SHOP ALL</h1>
+                        <p className="text-base md:text-lg text-muted-foreground font-medium italic">Discover our full range of electric excitement.</p>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-muted-foreground mr-2">
+                        <div className="flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-muted-foreground mr-2">
                             <SlidersHorizontal className="h-4 w-4" /> SORT BY:
                         </div>
                         <select
-                            className="bg-transparent border-b-2 border-primary font-black italic tracking-tighter outline-none cursor-pointer"
+                            className="bg-transparent border-b-2 border-primary font-black italic tracking-tighter outline-none cursor-pointer text-sm md:text-base"
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                         >
@@ -57,10 +57,10 @@ export function Products() {
                 </div>
 
                 {/* Category Filters */}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-nowrap overflow-x-auto pb-4 gap-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
                     <Button
                         variant={selectedCategory === "All" ? "default" : "outline"}
-                        className="rounded-full font-bold px-6 border-2"
+                        className="rounded-full font-bold px-6 border-2 flex-shrink-0"
                         onClick={() => setSelectedCategory("All")}
                     >
                         ALL TOYS
@@ -69,7 +69,7 @@ export function Products() {
                         <Button
                             key={cat}
                             variant={selectedCategory === cat ? "default" : "outline"}
-                            className="rounded-full font-bold px-6 border-2"
+                            className="rounded-full font-bold px-6 border-2 flex-shrink-0"
                             onClick={() => setSelectedCategory(cat)}
                         >
                             {cat.toUpperCase()}
