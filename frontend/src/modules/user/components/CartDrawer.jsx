@@ -76,8 +76,8 @@ export function CartDrawer() {
                                     exit={{ opacity: 0, x: -20 }}
                                     className="flex gap-4 group"
                                 >
-                                    <div className="w-24 h-24 bg-secondary/20 rounded-2xl flex items-center justify-center text-2xl">
-                                        🎮
+                                    <div className="w-24 h-24 bg-secondary/20 rounded-2xl overflow-hidden flex items-center justify-center">
+                                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex-1 space-y-2">
                                         <div className="flex justify-between items-start">

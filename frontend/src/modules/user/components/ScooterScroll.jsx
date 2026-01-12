@@ -1,27 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useScroll, useTransform, motion } from 'framer-motion';
 
-// 240 frames in /public/sequence/
 const frameCount = 240;
-const images = [];
 
-// Preload function (in a real app, you might want to do this more selectively or with a loader)
-const preloadImages = () => {
-    for (let i = 1; i <= frameCount; i++) {
-        const img = new Image();
-        // Naming convention: ezgif-frame-001.jpg
-        const paddedIndex = i.toString().padStart(3, '0');
-        img.src = `/sequence/ezgif-frame-${paddedIndex}.jpg`;
-        images.push(img);
+// Progressive loading strategy: Load critical frames first, then fill in gaps
+const getCriticalFrames = () => {
+    const critical = [];
+    // Load every 10th frame first (24 frames = ~90% less data)
+    for (let i = 1; i <= frameCount; i += 10) {
+        critical.push(i);
     }
+    return critical;
+};
+
+const getRemainingFrames = () => {
+    const critical = getCriticalFrames();
+    const remaining = [];
+    for (let i = 1; i <= frameCount; i++) {
+        if (!critical.includes(i)) {
+            remaining.push(i);
+        }
+    }
+    return remaining;
 };
 
 export function ScooterScroll() {
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
-    const [loading, setLoading] = useState(true);
-    const [imagesLoaded, setImagesLoaded] = useState(0);
-    const [frameImages, setFrameImages] = useState([]);
+    const [criticalFramesLoaded, setCriticalFramesLoaded] = useState(false);
+    const [allFramesLoaded, setAllFramesLoaded] = useState(false);
+    const [loadingProgress, setLoadingProgress] = useState(0);
+    const frameImagesRef = useRef([]);
 
     // Scroll progress for the entire container
     const { scrollYProgress } = useScroll({
@@ -29,40 +38,82 @@ export function ScooterScroll() {
         offset: ["start start", "end end"]
     });
 
+
     // Map scroll (0-1) to frame index (0-239)
     const currentIndex = useTransform(scrollYProgress, [0, 1], [0, frameCount - 1]);
 
+    // Phase 1: Load critical frames (every 10th frame) for instant start
     useEffect(() => {
-        // Determine image path dynamically
-        const loadedImages = [];
+        const criticalFrames = getCriticalFrames();
         let loadedCount = 0;
 
-        for (let i = 1; i <= frameCount; i++) {
+        frameImagesRef.current = new Array(frameCount);
+
+        criticalFrames.forEach((frameNum) => {
             const img = new Image();
-            // Naming convention: ezgif-frame-001.jpg
-            const paddedIndex = i.toString().padStart(3, '0');
+            const paddedIndex = frameNum.toString().padStart(3, '0');
             img.src = `/sequence/ezgif-frame-${paddedIndex}.jpg`;
 
             img.onload = () => {
+                frameImagesRef.current[frameNum - 1] = img;
                 loadedCount++;
-                setImagesLoaded(loadedCount);
-                if (loadedCount === frameCount) {
-                    setLoading(false);
+                setLoadingProgress(Math.round((loadedCount / criticalFrames.length) * 100));
+
+                if (loadedCount === criticalFrames.length) {
+                    setCriticalFramesLoaded(true);
                 }
             };
 
-            // Fallback for missing images to prevent broken canvas
             img.onerror = () => {
-                // Create a placeholder canvas if image fails (so dev can see something)
                 loadedCount++;
-                setImagesLoaded(loadedCount);
-                if (loadedCount === frameCount) setLoading(false);
-            }
-
-            loadedImages.push(img);
-        }
-        setFrameImages(loadedImages);
+                if (loadedCount === criticalFrames.length) {
+                    setCriticalFramesLoaded(true);
+                }
+            };
+        });
     }, []);
+
+    // Phase 2: Load remaining frames in background after critical frames are ready
+    useEffect(() => {
+        if (!criticalFramesLoaded) return;
+
+        const remainingFrames = getRemainingFrames();
+        let loadedCount = 0;
+
+        // Use requestIdleCallback for non-blocking background loading
+        const loadNextBatch = (startIdx) => {
+            const batchSize = 10;
+            const batch = remainingFrames.slice(startIdx, startIdx + batchSize);
+
+            batch.forEach((frameNum) => {
+                const img = new Image();
+                const paddedIndex = frameNum.toString().padStart(3, '0');
+                img.src = `/sequence/ezgif-frame-${paddedIndex}.jpg`;
+
+                img.onload = () => {
+                    frameImagesRef.current[frameNum - 1] = img;
+                    loadedCount++;
+                    if (loadedCount === remainingFrames.length) {
+                        setAllFramesLoaded(true);
+                    }
+                };
+
+                img.onerror = () => {
+                    loadedCount++;
+                    if (loadedCount === remainingFrames.length) {
+                        setAllFramesLoaded(true);
+                    }
+                };
+            });
+
+            if (startIdx + batchSize < remainingFrames.length) {
+                setTimeout(() => loadNextBatch(startIdx + batchSize), 50);
+            }
+        };
+
+        loadNextBatch(0);
+    }, [criticalFramesLoaded]);
+
 
     useEffect(() => {
         const render = (index) => {
@@ -71,43 +122,47 @@ export function ScooterScroll() {
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
 
-            // Handle scaling
-            // Set canvas dimensions to window size for fullscreen feel, or fixed aspect ratio
             const width = window.innerWidth;
             const height = window.innerHeight;
 
-            // Only resize if needed to avoid flickering (though checking every frame is okay for this)
             if (canvas.width !== width || canvas.height !== height) {
                 canvas.width = width;
                 canvas.height = height;
             }
 
-            const img = frameImages[Math.round(index)];
+            const frameIndex = Math.round(index);
+            let img = frameImagesRef.current[frameIndex];
+
+            // If exact frame isn't loaded, find nearest loaded frame
+            if (!img || !img.complete) {
+                // Look for nearest loaded frame
+                for (let offset = 1; offset <= 10; offset++) {
+                    const before = frameImagesRef.current[Math.max(0, frameIndex - offset)];
+                    const after = frameImagesRef.current[Math.min(frameCount - 1, frameIndex + offset)];
+
+                    if (before && before.complete && before.naturalHeight !== 0) {
+                        img = before;
+                        break;
+                    }
+                    if (after && after.complete && after.naturalHeight !== 0) {
+                        img = after;
+                        break;
+                    }
+                }
+            }
 
             // Clear canvas
-            ctx.fillStyle = '#050505'; // Background match
+            ctx.fillStyle = '#050505';
             ctx.fillRect(0, 0, width, height);
 
             if (img && img.complete && img.naturalHeight !== 0) {
-                // Draw image "contain" style
                 const scale = Math.min(width / img.width, height / img.height);
                 const x = (width / 2) - (img.width / 2) * scale;
                 const y = (height / 2) - (img.height / 2) * scale;
                 ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-            } else {
-                // Draw placeholder if image missing
-                ctx.fillStyle = '#1a1a1a';
-                ctx.font = '20px Inter';
-                ctx.fillText(`Frame ${Math.round(index)} (Missing Assets)`, width / 2 - 100, height / 2);
-
-                ctx.strokeStyle = '#333';
-                ctx.beginPath();
-                ctx.arc(width / 2, height / 2, 100 * (index / frameCount), 0, 2 * Math.PI);
-                ctx.stroke();
             }
         };
 
-        // Render loop responding to scroll change
         const unsubscribe = currentIndex.on("change", (latest) => {
             render(latest);
         });
@@ -116,7 +171,7 @@ export function ScooterScroll() {
         render(0);
 
         return () => unsubscribe();
-    }, [currentIndex, frameImages, loading]);
+    }, [currentIndex, criticalFramesLoaded]);
 
     return (
         <div ref={containerRef} className="h-[400vh] relative bg-[#050505]">
@@ -125,13 +180,10 @@ export function ScooterScroll() {
                 className="sticky top-0 w-full h-screen object-contain block"
             />
 
-            {/* Loading Indicator */}
-            {loading && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#050505] text-white">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="w-8 h-8 border-t-2 border-white rounded-full animate-spin" />
-                        <p className="font-mono text-xs uppercase tracking-widest">Loading Assets... {Math.round((imagesLoaded / frameCount) * 100)}%</p>
-                    </div>
+            {/* Minimal loading hint - only shows during initial critical frame load */}
+            {!criticalFramesLoaded && (
+                <div className="fixed bottom-8 right-8 z-50 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full">
+                    <p className="font-mono text-xs text-white/80">Loading {loadingProgress}%</p>
                 </div>
             )}
         </div>

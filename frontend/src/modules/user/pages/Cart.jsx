@@ -50,8 +50,8 @@ export function Cart() {
                                         exit={{ opacity: 0, x: -100 }}
                                         className="flex flex-col sm:flex-row gap-8 pb-8 border-b group"
                                     >
-                                        <div className="w-full sm:w-48 aspect-square rounded-[2rem] bg-secondary/20 flex items-center justify-center text-7xl transition-transform duration-500 group-hover:scale-105">
-                                            🎮
+                                        <div className="w-full sm:w-48 aspect-square rounded-[2rem] bg-secondary/20 overflow-hidden flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                         </div>
                                         <div className="flex-1 flex flex-col justify-between py-2">
                                             <div className="flex justify-between items-start">
@@ -107,8 +107,10 @@ export function Cart() {
                                     <span className="text-4xl font-black italic tracking-tighter text-primary">₹{(totalPrice * 1.18).toLocaleString()}</span>
                                 </div>
 
-                                <Button className="w-full h-16 rounded-full text-xl font-black italic tracking-tighter shadow-xl shadow-primary/20 group">
-                                    PROCEED TO CHECKOUT <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                                <Button asChild className="w-full h-16 rounded-full text-xl font-black italic tracking-tighter shadow-xl shadow-primary/20 group">
+                                    <Link to="/checkout">
+                                        PROCEED TO CHECKOUT <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                                    </Link>
                                 </Button>
 
                                 <div className="space-y-4 pt-4">
