@@ -156,7 +156,8 @@ export function ScooterScroll() {
             ctx.fillRect(0, 0, width, height);
 
             if (img && img.complete && img.naturalHeight !== 0) {
-                const scale = Math.min(width / img.width, height / img.height);
+                // Draw image "cover" style to fill screen (Math.max instead of Math.min)
+                const scale = Math.max(width / img.width, height / img.height);
                 const x = (width / 2) - (img.width / 2) * scale;
                 const y = (height / 2) - (img.height / 2) * scale;
                 ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
@@ -177,7 +178,7 @@ export function ScooterScroll() {
         <div ref={containerRef} className="h-[400vh] relative bg-[#050505]">
             <canvas
                 ref={canvasRef}
-                className="sticky top-0 w-full h-screen object-contain block"
+                className="sticky top-0 w-full h-screen object-cover block"
             />
 
             {/* Minimal loading hint - only shows during initial critical frame load */}
